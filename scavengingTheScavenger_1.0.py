@@ -62,7 +62,7 @@ if not os.path.exists( ERRORS_FILE ):
 
 DUMP_FOLDER = f'{LOCATION}/dumps/'
 if not os.path.exists( DUMP_FOLDER ):
-	os.system( f'mkdir {DUMP_FOLDER}' )
+	os.mkdir( f'{DUMP_FOLDER}' )
 
 API_CONF_FILE = f'{LOCATION}/tweet_API.conf'
 if not os.path.exists( API_CONF_FILE ):
@@ -85,11 +85,14 @@ def tweepyApiInit(conf_file):
 	config = configparser.ConfigParser()
 	config.read( conf_file )
 
-	if 'TWEEPY' in config:
+	try:
 		consumer_key = config['TWEEPY']['consumer_key']
 		consumer_secret = config['TWEEPY']['consumer_secret']
 		access_key = config['TWEEPY']['access_key']
 		access_secret = config['TWEEPY']['access_secret']
+	except Exception as e:
+		print( f'[{R}E{RES}] Missing {e} on tweet_API.conf!' )
+		exit(1)
 
 	# authorize twitter, initialize tweepy
 	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -118,6 +121,7 @@ credz_curr = 0
 credz_canc = 0
 credz_tot = sum( 1 for line in open( PASTE_FILE ) )
 errors = 0
+tweet_api_errors = 0
 
 ## selenium stuff
 profile = webdriver.FirefoxProfile()
@@ -133,14 +137,22 @@ else:
 time.sleep(1)
 
 while True :
+
+	if tweet_api_errors > 10:
+		print( f'[{R}E{RES}] Something is not right with your Tweeter API!' )
+		exit(1)
+
 	try:
 		scav_tweets = api.user_timeline(screen_name = 'leak_scavenger', count = nTweets , include_rts = True)
+		tweet_api_errors = 0
 	except tweepy.TweepError as e:
 		print( f'[{R}E{RES}] Tweepy got stuck!' )
 		logError(e)
 		errors += 1
-		time.sleep(60)
+		tweet_api_errors += 1
+		time.sleep(10)
 		scav_tweets = []
+		continue
 
 	print( f'[{C}~{RES}] Parsing the hell out of the {R}scavenger!{RES} {C}o.O{RES}' )
 
