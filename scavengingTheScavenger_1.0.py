@@ -13,8 +13,11 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from platform import python_version
 from colorama import Fore, Back, Style
+from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.command import Command
-from selenium.webdriver.firefox.options import Options 
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 os.system('clear')
@@ -110,7 +113,7 @@ def writeDump(file, text):
 		ff.write(text)
 
 ##### main
-print( f'[{Y}~{RES}] Connecting Twitter {Y}^.^{RES}' )
+print( f'[{Y}~{RES}] Connecting Tweeter {Y}^.^{RES}' )
 api = tweepyApiInit(API_CONF_FILE)
 print( f'[{G}+{RES}] Connected {G}:D{RES}' )
 
@@ -139,7 +142,7 @@ time.sleep(1)
 while True :
 
 	if tweet_api_errors > 10:
-		print( f'[{R}E{RES}] Something is not right with your Twitter API!' )
+		print( f'[{R}E{RES}] Something is not right with your Tweeter API!' )
 		exit(1)
 
 	try:
@@ -185,23 +188,22 @@ while True :
 						credz_canc += 1
 
 				elif 'ghostbin' in rLink:
+					print(rLink)
 					driver.get( rLink )
 					print( f'[{Y}-{RES}] downloading {rLink} {Y}o.O{RES}' )
 
-
-					curr_url = driver.current_url
 					ccc = 0
 					## wait for Cl0u*f74r3 to think 
 					## that my bot is not a bot
 					## so that my bot can check 
 					## stuff that the bots cannot check
+					_ = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
 					while 'Checking your browser before accessing' in driver.page_source:
 						if ccc > 100:
 							print( f'[{R}x{RES}] mmmmh.. did Cl0u*f74r3 got me?' )
 							e = f'Got stuck here:\n{driver.page_source}'
 							logError(e)
 							break
-						curr_url = driver.current_url
 						time.sleep(0.3)
 						ccc += 1
 
