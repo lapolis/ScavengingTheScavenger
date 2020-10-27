@@ -188,7 +188,6 @@ while True :
 						credz_canc += 1
 
 				elif 'ghostbin' in rLink:
-					print(rLink)
 					driver.get( rLink )
 					print( f'[{Y}-{RES}] downloading {rLink} {Y}o.O{RES}' )
 
