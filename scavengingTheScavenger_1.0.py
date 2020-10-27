@@ -113,7 +113,7 @@ def writeDump(file, text):
 		ff.write(text)
 
 ##### main
-print( f'[{Y}~{RES}] Connecting Tweeter {Y}^.^{RES}' )
+print( f'[{Y}~{RES}] Connecting Twitter {Y}^.^{RES}' )
 api = tweepyApiInit(API_CONF_FILE)
 print( f'[{G}+{RES}] Connected {G}:D{RES}' )
 
@@ -142,7 +142,7 @@ time.sleep(1)
 while True :
 
 	if tweet_api_errors > 10:
-		print( f'[{R}E{RES}] Something is not right with your Tweeter API!' )
+		print( f'[{R}E{RES}] Something is not right with your Twitter API!' )
 		exit(1)
 
 	try:

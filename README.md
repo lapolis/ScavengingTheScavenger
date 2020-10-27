@@ -8,7 +8,7 @@ Recently, I stumbled across an interesting Twitter account called [@leak_scaveng
 
 So, who the hell coded this amazing bot? [@rnd_infosec_guy](https://twitter.com/rnd_infosec_guy) did!  
 Why the hell am I telling you this? Well, because I just finished coding "Scavenging The Scavenger".  
-Wtf is that? Scavenging The Scavenger is a simple Twitter scraper using [Tweeter API](https://developer.twitter.com/en/docs) that constantly checks [@leak_scavenger](https://twitter.com/leak_scavenger) tweets for dumps containing credentials.
+Wtf is that? Scavenging The Scavenger is a simple Twitter scraper using [Twitter API](https://developer.twitter.com/en/docs) that constantly checks [@leak_scavenger](https://twitter.com/leak_scavenger) tweets for dumps containing credentials.
 
 This is a very basic script, let's just call it... "something that just works" *(I apologise to all the real devs out there :P)*.
 
