@@ -31,3 +31,6 @@ or
 python3.7 scavengingTheScavenger_1.0.py -f /usr/lib/firefox-esr/firefox-esr
 ```
 It will create a folder called `dumps` used to store all the downloaded dumps in txt format. It will also create 2 more files used to log the paste already downloaded and the errors encountered ( `pasteList.txt` and `errors.txt` ).
+
+## TODO
+Well, find a way to store everything nicely on a db. It will take time.
