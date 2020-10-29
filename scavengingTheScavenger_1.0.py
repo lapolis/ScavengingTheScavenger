@@ -112,6 +112,15 @@ def writeDump(file, text):
 	with open( file, 'w+' ) as ff:
 		ff.write(text)
 
+def checkBin(driver):
+	try:
+		_ = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+		_ = driver.page_source
+		return driver, True
+	except Exception as e:
+		time.sleep(3)
+		return driver, False
+
 ##### main
 print( f'[{Y}~{RES}] Connecting Twitter {Y}^.^{RES}' )
 api = tweepyApiInit(API_CONF_FILE)
@@ -188,7 +197,6 @@ while True :
 						credz_canc += 1
 
 				elif 'ghostbin' in rLink:
-					driver.get( rLink )
 					print( f'[{Y}-{RES}] downloading {rLink} {Y}o.O{RES}' )
 
 					ccc = 0
@@ -196,7 +204,17 @@ while True :
 					## that my bot is not a bot
 					## so that my bot can check 
 					## stuff that the bots cannot check
-					_ = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+					contents = 0
+					while not contents :
+						driver.get( rLink )
+						driver, contents = checkBin(driver)
+						print('Checking contents!!!')
+						ccc += 1
+						if ccc > 5:
+							print('passionggggggggg')
+							continue
+					print('passseeeeedddd????')
+
 					while 'Checking your browser before accessing' in driver.page_source:
 						if ccc > 100:
 							print( f'[{R}x{RES}] mmmmh.. did Cl0u*f74r3 got me?' )
