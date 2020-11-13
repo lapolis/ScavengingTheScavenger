@@ -215,7 +215,21 @@ while True :
 							continue
 					print('passseeeeedddd????')
 
-					while 'Checking your browser before accessing' in driver.page_source:
+					try:
+						sorcio = driver.page_source
+					except Exception as e:
+						print(f'page source emptyyyyy??\n{e}\n')
+						time.sleep(4)
+						pass
+
+					try:
+						sorcio = driver.page_source
+					except Exception as e:
+						print(f'empty again????\n{e}\n\nSkipping this stuff')
+						continue
+
+
+					while 'Checking your browser before accessing' in sorcio:
 						if ccc > 100:
 							print( f'[{R}x{RES}] mmmmh.. did Cl0u*f74r3 got me?' )
 							e = f'Got stuck here:\n{driver.page_source}'
