@@ -229,7 +229,7 @@ while True :
 						continue
 
 
-					while 'Checking your browser before accessing' in sorcio:
+					while 'Checking your browser before accessing' in driver.page_source:
 						if ccc > 100:
 							print( f'[{R}x{RES}] mmmmh.. did Cl0u*f74r3 got me?' )
 							e = f'Got stuck here:\n{driver.page_source}'
