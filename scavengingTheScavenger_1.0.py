@@ -14,7 +14,7 @@ from selenium import webdriver
 from platform import python_version
 from colorama import Fore, Back, Style
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.command import Command
+# from selenium.webdriver.remote.command import Command
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -137,8 +137,6 @@ tweet_api_errors = 0
 
 
 while True :
-
-
 	## selenium stuff
 	profile = webdriver.FirefoxProfile()
 	profile.set_preference("dom.webdriver.enabled", False)
@@ -203,35 +201,25 @@ while True :
 					print( f'[{Y}-{RES}] downloading {rLink} {Y}o.O{RES}' )
 
 					ccc = 0
-					## wait for Cl0u*f74r3 to think 
-					## that my bot is not a bot
-					## so that my bot can check 
-					## stuff that the bots cannot check
+					## wait for Cl0u*f74r3
 					contents = 0
 					while not contents :
 						driver.get( rLink )
 						driver, contents = checkBin(driver)
-						print('Checking contents!!!')
 						ccc += 1
 						if ccc > 5:
-							print('passionggggggggg')
 							continue
-					print('passseeeeedddd????')
 
 					try:
 						sorcio = driver.page_source
 					except Exception as e:
-						print(f'page source emptyyyyy??\n{e}\n')
 						time.sleep(4)
 						pass
 
-					try:
-						sorcio = driver.page_source
-					except Exception as e:
-						print(f'empty again????\n{e}\n\nSkipping this stuff')
-						continue
-
-					print(f'First count --> {ccc}')
+					# try:
+					# 	sorcio = driver.page_source
+					# except Exception as e:
+					# 	continue
 
 					try:
 						while 'Checking your browser before accessing' in driver.page_source:
