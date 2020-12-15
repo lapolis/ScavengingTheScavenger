@@ -112,6 +112,15 @@ def writeDump(file, text):
 	with open( file, 'w+' ) as ff:
 		ff.write(text)
 
+def checkBin(driver):
+	try:
+		_ = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+		_ = driver.page_source
+		return driver, True
+	except Exception as e:
+		time.sleep(3)
+		return driver, False
+
 ##### main
 print( f'[{Y}~{RES}] Connecting Twitter {Y}^.^{RES}' )
 api = tweepyApiInit(API_CONF_FILE)
@@ -126,20 +135,23 @@ credz_tot = sum( 1 for line in open( PASTE_FILE ) )
 errors = 0
 tweet_api_errors = 0
 
-## selenium stuff
-profile = webdriver.FirefoxProfile()
-profile.set_preference("dom.webdriver.enabled", False)
-profile.update_preferences()
-desired = DesiredCapabilities.FIREFOX
-options = Options()
-options.headless = True
-if fir_bin:
-	driver = webdriver.Firefox(firefox_binary=fir_bin, options=options, firefox_profile=profile, desired_capabilities=desired)
-else:
-	driver = webdriver.Firefox(options=options, firefox_profile=profile, desired_capabilities=desired)
-time.sleep(1)
 
 while True :
+
+
+	## selenium stuff
+	profile = webdriver.FirefoxProfile()
+	profile.set_preference("dom.webdriver.enabled", False)
+	profile.update_preferences()
+	desired = DesiredCapabilities.FIREFOX
+	options = Options()
+	options.headless = True
+	if fir_bin:
+		driver = webdriver.Firefox(firefox_binary=fir_bin, options=options, firefox_profile=profile, desired_capabilities=desired)
+	else:
+		driver = webdriver.Firefox(options=options, firefox_profile=profile, desired_capabilities=desired)
+	time.sleep(1)
+
 
 	if tweet_api_errors > 10:
 		print( f'[{R}E{RES}] Something is not right with your Twitter API!' )
@@ -188,7 +200,6 @@ while True :
 						credz_canc += 1
 
 				elif 'ghostbin' in rLink:
-					driver.get( rLink )
 					print( f'[{Y}-{RES}] downloading {rLink} {Y}o.O{RES}' )
 
 					ccc = 0
@@ -196,15 +207,45 @@ while True :
 					## that my bot is not a bot
 					## so that my bot can check 
 					## stuff that the bots cannot check
-					_ = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-					while 'Checking your browser before accessing' in driver.page_source:
-						if ccc > 100:
-							print( f'[{R}x{RES}] mmmmh.. did Cl0u*f74r3 got me?' )
-							e = f'Got stuck here:\n{driver.page_source}'
-							logError(e)
-							break
-						time.sleep(0.3)
+					contents = 0
+					while not contents :
+						driver.get( rLink )
+						driver, contents = checkBin(driver)
+						print('Checking contents!!!')
 						ccc += 1
+						if ccc > 5:
+							print('passionggggggggg')
+							continue
+					print('passseeeeedddd????')
+
+					try:
+						sorcio = driver.page_source
+					except Exception as e:
+						print(f'page source emptyyyyy??\n{e}\n')
+						time.sleep(4)
+						pass
+
+					try:
+						sorcio = driver.page_source
+					except Exception as e:
+						print(f'empty again????\n{e}\n\nSkipping this stuff')
+						continue
+
+					print(f'First count --> {ccc}')
+
+					try:
+						while 'Checking your browser before accessing' in driver.page_source:
+							if ccc > 100:
+								print( f'[{R}x{RES}] mmmmh.. did Cl0u*f74r3 got me?' )
+								e = f'Got stuck here:\n{driver.page_source}'
+								logError(e)
+								break
+							print(f'Count --> {ccc}')
+							time.sleep(0.3)
+							ccc += 1
+					except Exception as e:
+						print(f'Error --> {e}')
+						continue
 
 					soup = BeautifulSoup(driver.page_source, features='lxml')
 					with open( temp_filename, 'w+' ) as ff:
@@ -233,5 +274,8 @@ while True :
 	print( f'[{G}+{RES}] Downloaded {G}{credz_curr}{RES} paste on thiz sesh {G}:F{RES}' )
 	print( f'[{G}+{RES}] Downloaded {GG}{credz_tot}{RES} paste on total {GG}^0^{RES}' )
 	print( f'[{C}O{RES}] Sleeping a bit {C}-.-{RES}' )
+
+	driver.quit()
+
 	time.sleep(60)
 	nTweets = 20
