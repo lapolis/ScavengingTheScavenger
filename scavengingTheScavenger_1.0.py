@@ -135,20 +135,23 @@ credz_tot = sum( 1 for line in open( PASTE_FILE ) )
 errors = 0
 tweet_api_errors = 0
 
-## selenium stuff
-profile = webdriver.FirefoxProfile()
-profile.set_preference("dom.webdriver.enabled", False)
-profile.update_preferences()
-desired = DesiredCapabilities.FIREFOX
-options = Options()
-options.headless = True
-if fir_bin:
-	driver = webdriver.Firefox(firefox_binary=fir_bin, options=options, firefox_profile=profile, desired_capabilities=desired)
-else:
-	driver = webdriver.Firefox(options=options, firefox_profile=profile, desired_capabilities=desired)
-time.sleep(1)
 
 while True :
+
+
+	## selenium stuff
+	profile = webdriver.FirefoxProfile()
+	profile.set_preference("dom.webdriver.enabled", False)
+	profile.update_preferences()
+	desired = DesiredCapabilities.FIREFOX
+	options = Options()
+	options.headless = True
+	if fir_bin:
+		driver = webdriver.Firefox(firefox_binary=fir_bin, options=options, firefox_profile=profile, desired_capabilities=desired)
+	else:
+		driver = webdriver.Firefox(options=options, firefox_profile=profile, desired_capabilities=desired)
+	time.sleep(1)
+
 
 	if tweet_api_errors > 10:
 		print( f'[{R}E{RES}] Something is not right with your Twitter API!' )
@@ -228,15 +231,21 @@ while True :
 						print(f'empty again????\n{e}\n\nSkipping this stuff')
 						continue
 
+					print(f'First count --> {ccc}')
 
-					while 'Checking your browser before accessing' in driver.page_source:
-						if ccc > 100:
-							print( f'[{R}x{RES}] mmmmh.. did Cl0u*f74r3 got me?' )
-							e = f'Got stuck here:\n{driver.page_source}'
-							logError(e)
-							break
-						time.sleep(0.3)
-						ccc += 1
+					try:
+						while 'Checking your browser before accessing' in driver.page_source:
+							if ccc > 100:
+								print( f'[{R}x{RES}] mmmmh.. did Cl0u*f74r3 got me?' )
+								e = f'Got stuck here:\n{driver.page_source}'
+								logError(e)
+								break
+							print(f'Count --> {ccc}')
+							time.sleep(0.3)
+							ccc += 1
+					except Exception as e:
+						print(f'Error --> {e}')
+						continue
 
 					soup = BeautifulSoup(driver.page_source, features='lxml')
 					with open( temp_filename, 'w+' ) as ff:
@@ -265,5 +274,8 @@ while True :
 	print( f'[{G}+{RES}] Downloaded {G}{credz_curr}{RES} paste on thiz sesh {G}:F{RES}' )
 	print( f'[{G}+{RES}] Downloaded {GG}{credz_tot}{RES} paste on total {GG}^0^{RES}' )
 	print( f'[{C}O{RES}] Sleeping a bit {C}-.-{RES}' )
+
+	driver.quit()
+
 	time.sleep(60)
 	nTweets = 20
