@@ -9,7 +9,6 @@ import argparse
 import datetime
 import requests
 import configparser
-from bs4 import BeautifulSoup
 from platform import python_version
 from colorama import Fore, Back, Style
 
@@ -19,12 +18,6 @@ if python_version()[0:3] < '3.7':
 	print('\n\nMake sure you have Python 3.7+ installed, quitting.\n\n')
 	exit(1)
 
-parser = argparse.ArgumentParser()
-parser.add_argument( '-f', '--firefox_binary', help='Specify the full path of Firefox/Firefox-esr. Not the symbolic link!\n' )
-args = parser.parse_args()
-
-# selenium/requests stuff
-fir_bin = args.firefox_binary
 headers = {
 	'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0',
 }
