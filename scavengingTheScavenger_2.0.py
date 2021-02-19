@@ -33,6 +33,7 @@ RES = f'{Style.RESET_ALL}'
 # general stuff
 LOCATION = os.getcwd()
 STARTED = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+LAST_DWNL = 'NA'
 
 # doing some mess on your folder
 l_list = []
@@ -157,6 +158,7 @@ while True :
 				print( f'[{G}+{G}] {G}DOWNLOADED!!{RES} --> {temp_filename}' )
 				credz_curr += 1
 				credz_tot += 1
+        LAST_DWNL = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 			else :
 				print( f'[{R}x{RES}] too late!!' )
 				credz_canc += 1
@@ -173,6 +175,7 @@ while True :
 		print( f'[{R}*{RES}] LOST {R}{credz_canc}{RES} paste you SLOW!' )
 	else:
 		print( f'[{Y}-{RES}] LOST {Y}NO{RES} pastes so far! Keep it up!' )
+	print( f'[{C}*{RES}] Last Download {C}{LAST_DWNL}{RES} {C}:F{RES}' )
 	print( f'[{G}+{RES}] Downloaded {G}{credz_curr}{RES} paste on thiz sesh {G}:F{RES}' )
 	print( f'[{G}+{RES}] Downloaded {GG}{credz_tot}{RES} paste on total {GG}^0^{RES}' )
 	print( f'[{C}O{RES}] Sleeping a bit {C}-.-{RES}' )
