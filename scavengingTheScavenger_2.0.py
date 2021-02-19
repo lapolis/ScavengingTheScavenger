@@ -60,7 +60,9 @@ if not os.path.exists( API_CONF_FILE ):
 	exit(1)
 
 def user_pass ( tweet ) :
-	return tweet.split(' ')[1] if 'contains credentials' in tweet else None
+	# print(tweet)
+	checker = ['contains credentials','password']
+	return tweet.split(' ')[1] if any( [True if x in tweet else False for x in checker] ) else None
 
 def tweepyApiInit(conf_file):
 	# getting your keys
@@ -128,37 +130,39 @@ while True :
 	for tweet in scav_tweets :
 		userpass_link = user_pass( tweet.text )
 
-		if userpass_link:
-			if not userpass_link in l_list:
-				
-				with open( PASTE_FILE , 'a' ) as af :
-					af.write( f'{userpass_link}\n' )
-				l_list.append(userpass_link)
+		if userpass_link and not userpass_link in l_list:
+			
+			with open( PASTE_FILE , 'a' ) as af :
+				af.write( f'{userpass_link}\n' )
+			l_list.append(userpass_link)
 
-				s = requests.Session()
-				r = s.get( userpass_link , headers=headers, allow_redirects=True )
-				# regOut = re.findall( r'(?:;URL=)(.*?)(?:"><)' , r.text ))
-				regOut = re.findall( r'(?:href=")(.*?bin.*?)(?:">)' , r.text )
-				if regOut:
-					rLink = regOut[-1]
-				else:
-					continue
+			s = requests.Session()
+			r = s.get( userpass_link , headers=headers, allow_redirects=True )
+			# regOut = re.findall( r'(?:;URL=)(.*?)(?:"><)' , r.text ))
+			regOut = re.findall( r'(?:URL=)(.*?bin.*?)(?:">)' , r.text )
+			# print(r.text)
+			# print(f'Reg Out --> {regOut}')
+			# continue
+			if regOut:
+				rLink = regOut[-1]
+			else:
+				continue
 
-				temp_filename = f'{DUMP_FOLDER}{hashlib.md5(rLink.encode()).hexdigest()}'
+			temp_filename = f'{DUMP_FOLDER}{hashlib.md5(rLink.encode()).hexdigest()}'
 
-				if r.status_code == 200 or r.status_code == 403 :
-					print( f'[{Y}-{RES}] downloading {rLink} {Y}o.O{RES}' )
-					dump = s.get( rLink )
-					writeDump( temp_filename, dump.text )
-					print( f'[{G}+{G}] {G}DOWNLOADED!!{RES} --> {temp_filename}' )
-					credz_curr += 1
-					credz_tot += 1
-				else :
-					print( f'[{R}x{RES}] too late!!' )
-					credz_canc += 1
-
+			if r.status_code == 200 or r.status_code == 403 :
+				print( f'[{Y}-{RES}] downloading {rLink} {Y}o.O{RES}' )
+				dump = s.get( rLink )
+				writeDump( temp_filename, dump.text )
+				print( f'[{G}+{G}] {G}DOWNLOADED!!{RES} --> {temp_filename}' )
+				credz_curr += 1
+				credz_tot += 1
 			else :
-				print( f'[{R}x{RES}] Nothing new to be exited about --> {R}:({RES}' )
+				print( f'[{R}x{RES}] too late!!' )
+				credz_canc += 1
+
+		else :
+			print( f'[{R}x{RES}] Nothing new to be exited about --> {R}:({RES}' )
 				
 	print( f'[{C}i{RES}] Script started @ {C}{STARTED}{RES}!' )
 	if errors > 0:
