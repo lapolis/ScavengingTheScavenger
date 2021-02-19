@@ -106,7 +106,7 @@ credz_curr = 0
 credz_canc = 0
 credz_tot = sum( 1 for line in open( PASTE_FILE ) )
 errors = 0
-tweet_api_errors = 0
+tweet_api_errors = 0 
 
 
 while True :
